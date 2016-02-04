@@ -1,13 +1,14 @@
+from host import Host
+from instance import Instance
+
 class DataReader:
     HOSTS_FILE = 'HostState.txt'
     INSTANCES_FILE = 'InstanceState.txt'
     hosts = []
+    instances = []
 
-    def __init__(self):
-        #self.hosts = []
-        self.instances = []
-
-    def __getRows(self, fileName):
+    @staticmethod
+    def __getRows(fileName):
         rows = []
         with open(fileName, 'r') as f:
             data = f.readlines()
@@ -17,18 +18,39 @@ class DataReader:
                 rows.append(row)
         return rows
 
-    def createHosts(self):
-        for host in __getRows(HOSTS_FILE):
-            hosts.append(Host(host[0], host[1], host[2]))
+    @staticmethod
+    def createHostsFromFile(fileName = None):
+        if fileName == None:
+            fileName = DataReader.HOSTS_FILE
+        for host in DataReader.__getRows(fileName):
+            host = Host(int(host[0]), int(host[1]), int(host[2]))
+            if host not in DataReader.hosts:
+                DataReader.hosts.append(host)
 
-    def createInstances(self):
-        for instRow in __getRows(INSTANCES_FILE):
-            hostCriteria = Host(instance.hostID)
-            host = Host.findHost(hostCriteria)
-            host.addInstance(instance)
-            instance = Instance(instRow[0], instRow[1], instRow[2])
-            instance.setHost(host)
-            self.instances.append(instance)
+
+    @staticmethod
+    def findHostByID(hostID):
+        result = [h for h in DataReader.hosts if h.hostID == hostID]
+        if len(result) == 1:
+            return result[0]
+        elif len(result) > 1:
+            print 'Duplicated entries!!!'
+            return None
+        else:
+            print 'Host not found!!!'
+            return None
+
+    @staticmethod
+    def createInstancesFromFile(fileName = None):
+        if fileName == None:
+            fileName = DataReader.INSTANCES_FILE
+        for instRow in DataReader.__getRows(fileName):
+            instance = Instance(int(instRow[0]), int(instRow[1]), int(instRow[2]))
+            host = DataReader.findHostByID(instance.hostID)
+            if host is not None:
+                instance.setHost(host)
+                host.addInstance(instance)
+            DataReader.instances.append(instance)
 
     @staticmethod
     def findHost(host):
