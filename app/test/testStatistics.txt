@@ -1,0 +1,5 @@
+STATISTICS CLUSTERS INFO
+------------------------
+HostClustering: 8,0
+DatacentreClustering: 8,0
+AvailableHosts: 0
