@@ -13,6 +13,10 @@ class TestDataReader(unittest.TestCase):
          DataReader.createHostsFromFile(TestDataReader.TEST_HOSTS_FILE)
          self.assertEquals(len(DataReader.hosts), 8)
 
+    def testCreateHostsFileError(self):
+         DataReader.createHostsFromFile(TestDataReader.TEST_HOSTS_FILE)
+         self.assertRaises(Exception)
+
     def testFindHostByID(self):
         host = DataReader.findHostByID(2)
         self.assertIsNotNone(host)

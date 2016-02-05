@@ -7,7 +7,7 @@ from statistics_service import StatisticsService
 from data_reader import DataReader
 from sets import Set
 
-class TestHost(unittest.TestCase):
+class TestStatisticsServie(unittest.TestCase):
 
     def setUp(self):
        DataReader.createHostsFromFile()

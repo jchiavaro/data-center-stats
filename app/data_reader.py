@@ -15,7 +15,7 @@ class DataReader:
             data = f.readlines()
             for line in data:
                 row = line.split(',')
-                if not len(rows) == 3:
+                if len(row) != 3:
                     raise(Exception('Invalid Row length'))
                     logging.error('FILE FORMAT ERROR: Invalid line')
                 rows.append(row)
@@ -25,13 +25,34 @@ class DataReader:
     def createHostsFromFile(fileName = None):
         if fileName == None:
             fileName = DataReader.HOSTS_FILE
-        for host in DataReader.__getRows(fileName):
+        try:
+            allRows = DataReader.__getRows(fileName)
+        except Exception as e:
+            logging.error('FILE ERROR: ' + e.message)
+            raise(e)
+        for host in allRows:
             host = Host(int(host[0]), int(host[1]), int(host[2]))
             if host not in DataReader.hosts:
+                logging.debug('DATA READER: Adding host ' + str(host.hostID))
                 DataReader.hosts.append(host)
             else:
                 logging.info('DUPLICATED HOST: skipping host')
 
+    @staticmethod
+    def createInstancesFromFile(fileName = None):
+        if fileName == None:
+            fileName = DataReader.INSTANCES_FILE
+        for instRow in DataReader.__getRows(fileName):
+            instance = Instance(int(instRow[0]), int(instRow[1]), int(instRow[2]))
+            host = DataReader.findHostByID(instance.hostID)
+            if host is not None:
+                instance.setHost(host)
+                host.addInstance(instance)
+            else:
+                logging.error('CREATE INSTANCE: Orphan instance - Skipping instance')
+                continue
+            logging.debug('DATA READER: Adding instance ' + str(instance.hostID))
+            DataReader.instances.append(instance)
 
     @staticmethod
     def findHostByID(hostID):
@@ -40,28 +61,7 @@ class DataReader:
             return result[0]
         elif len(result) > 1:
             logging.error('FIND HOST: Duplicated host')
-            raise(Exception('Duplicated host'))
+            return None
         else:
             logging.info('FIND HOST: Host not found')
-            raise(Exception('Host not found'))
-
-    @staticmethod
-    def createInstancesFromFile(fileName = None):
-        if fileName == None:
-            fileName = DataReader.INSTANCES_FILE
-        for instRow in DataReader.__getRows(fileName):
-            instance = Instance(int(instRow[0]), int(instRow[1]), int(instRow[2]))
-            try:
-                host = DataReader.findHostByID(instance.hostID)
-            except Exception as e:
-                logging.error('CREATE INSTANCE: Orphan instance')
-            if host is not None:
-                instance.setHost(host)
-                host.addInstance(instance)
-            DataReader.instances.append(instance)
-
-    @staticmethod
-    def findHost(host):
-        if host in hosts:
-            return host
-        return None
+            return None
