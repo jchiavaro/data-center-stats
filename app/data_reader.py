@@ -10,6 +10,8 @@ class DataReader:
 
     @staticmethod
     def __getRows(fileName):
+        """Return a list with each line of the file"""
+
         rows = []
         with open(fileName, 'r') as f:
             data = f.readlines()
@@ -23,6 +25,8 @@ class DataReader:
 
     @staticmethod
     def createHostsFromFile(fileName = None):
+        """Create the Host objects from the file and expose them in a list"""
+
         if fileName == None:
             fileName = DataReader.HOSTS_FILE
         try:
@@ -40,6 +44,8 @@ class DataReader:
 
     @staticmethod
     def createInstancesFromFile(fileName = None):
+        """Create the Instance objects from the file and expose them in a list"""
+
         if fileName == None:
             fileName = DataReader.INSTANCES_FILE
         for instRow in DataReader.__getRows(fileName):
@@ -56,6 +62,8 @@ class DataReader:
 
     @staticmethod
     def findHostByID(hostID):
+        """Return the Host object for the ID"""
+
         result = [h for h in DataReader.hosts if h.hostID == hostID]
         if len(result) == 1:
             return result[0]

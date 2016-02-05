@@ -1,6 +1,9 @@
 # data-center-stats
 ===================
 
+### Requirements
+- Python 2.7 or higher
+
 ### Execute the app
 Clone the git repository: https://github.com/jchiavaro/data-center-stats.git
 * Go to the app directory:
