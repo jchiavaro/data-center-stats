@@ -1,0 +1,5 @@
+STATISTICS CLUSTERS INFO
+------------------------
+HostClustering: 8,19
+DatacentreClustering: 8,15
+AvailableHosts: 10

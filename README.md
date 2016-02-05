@@ -7,10 +7,13 @@
 ### Execute the app
 Clone the git repository: https://github.com/jchiavaro/data-center-stats.git
 * Go to the app directory: **cd app**
+* Add execution permissions for the main script: **chmod a+x data_center.py**
 
 * A Python executable script is provided: from the app directory,
 execute the data_center.py script:
 **./data_center.py customerID hotID datacentreID [options]**
+or
+**python data_center.py customerID hotID datacentreID [options]**
 Check the help for more information about the program arguments:
 **./data_center.py -h** or **./data_center.py --help**
 
